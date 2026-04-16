@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="에이스웨딩 - 청주 최대 웨딩 플래너. 웨딩홀, 스드메, 한복, 예복, 혼수 가전까지 원스톱 웨딩 서비스를 제공합니다.">
+    <title>에이스웨딩 | 청주 웨딩 플래너</title>
+    <style>
+        /* Reset & Base */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            background-color: #f5f0eb;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Main container */
+        .landing-wrapper {
+            width: 100%;
+            max-width: 1920px;
+            margin: 0 auto;
+            line-height: 0;
+            font-size: 0;
+        }
+
+        /* Each section */
+        .landing-section {
+            display: block;
+            width: 100%;
+        }
+
+        .landing-section picture {
+            display: block;
+            width: 100%;
+        }
+
+        .landing-section img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border: none;
+            outline: none;
+        }
+
+        /* Loading placeholder for lazy images */
+        .landing-section img[loading="lazy"] {
+            background-color: #f5f0eb;
+            min-height: 100px;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(139, 115, 85, 0.85);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background-color: rgba(139, 115, 85, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Loading screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f5f0eb;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-logo {
+            font-family: 'Georgia', serif;
+            font-size: 28px;
+            color: #8b7355;
+            letter-spacing: 4px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .loading-bar-container {
+            width: 200px;
+            height: 2px;
+            background-color: rgba(139, 115, 85, 0.2);
+            border-radius: 1px;
+            overflow: hidden;
+        }
+
+        .loading-bar {
+            width: 0%;
+            height: 100%;
+            background-color: #8b7355;
+            border-radius: 1px;
+            transition: width 0.3s ease;
+        }
+
+        /* Mobile-only sections: hidden on PC */
+        .mobile-only {
+            display: none;
+        }
+
+        /* Map Section */
+        .map-section {
+            background-color: #f5f0eb;
+            line-height: 1.6;
+            font-size: 16px;
+            font-family: 'Pretendard', 'Noto Sans KR', -apple-system, sans-serif;
+        }
+
+        .map-section-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .map-subtitle {
+            font-size: 14px;
+            color: #8b7355;
+            letter-spacing: 3px;
+            margin-bottom: 8px;
+        }
+
+        .map-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 40px;
+        }
+
+        .map-container {
+            width: 100%;
+            height: 450px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 36px;
+        }
+
+        .map-container #kakaoMap {
+            width: 100%;
+            height: 100%;
+        }
+
+        .map-info {
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            display: inline-block;
+            text-align: center;
+        }
+
+        .map-info-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 16px;
+        }
+
+        .map-info-address {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 6px;
+        }
+
+        .map-info-note {
+            font-size: 13px;
+            color: #999;
+            margin-top: 14px;
+        }
+
+        .map-link-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 32px;
+            background-color: #8b7355;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .map-link-btn:hover {
+            background-color: #6e5a43;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            .map-section-inner {
+                padding: 40px 16px;
+            }
+            .map-title {
+                font-size: 24px;
+                margin-bottom: 24px;
+            }
+            .map-container {
+                height: 300px;
+                border-radius: 8px;
+            }
+            .map-info {
+                padding: 20px;
+                width: 100%;
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .landing-wrapper {
+                max-width: 100%;
+            }
+
+            .mobile-only {
+                display: block;
+            }
+
+            .back-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 44px;
+                height: 44px;
+                font-size: 18px;
+            }
+        }
+
+        /* Inquiry Form Section */
+        .form-section {
+            background: linear-gradient(180deg, #f5f0eb 0%, #efe8df 100%);
+            padding: 100px 20px;
+            font-family: 'Pretendard', 'Noto Sans KR', -apple-system, sans-serif;
+            line-height: 1.5;
+            font-size: 16px;
+        }
+        .form-container {
+            max-width: 780px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 60px 56px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.04);
+            position: relative;
+            overflow: hidden;
+        }
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #c4a87a, #8b7355, #c4a87a);
+        }
+        .form-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        .form-header p {
+            color: #8b7355;
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            line-height: 1.4;
+        }
+        .form-header h2 {
+            font-size: 36px;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 14px;
+            line-height: 1.3;
+            letter-spacing: -0.5px;
+        }
+        .form-header .sub-desc {
+            font-size: 16px;
+            color: #888;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0;
+            padding: 24px 0;
+            border-bottom: 1px solid #f2f0ed;
+        }
+        .form-group:last-of-type {
+            border-bottom: none;
+            padding-bottom: 16px;
+        }
+        .form-label {
+            width: 130px;
+            font-size: 15px;
+            font-weight: 700;
+            color: #333;
+            flex-shrink: 0;
+            line-height: 1.2;
+            position: relative;
+            padding-left: 12px;
+        }
+        .form-label::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 14px;
+            background: #c4a87a;
+            border-radius: 2px;
+        }
+        .form-input-box {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .form-control {
+            height: 48px;
+            padding: 0 16px;
+            border: 1.5px solid #e5e0db;
+            border-radius: 10px;
+            font-size: 15px;
+            color: #222;
+            background: #faf9f7;
+            outline: none;
+            transition: all 0.25s ease;
+            font-family: inherit;
+        }
+        .form-control::placeholder {
+            color: #bbb;
+        }
+        .form-control:focus {
+            border-color: #8b7355;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(139, 115, 85, 0.12);
+        }
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 14px;
+            background-color: #faf9f7;
+            padding-right: 36px;
+            cursor: pointer;
+        }
+        select.form-control:focus {
+            background-color: #fff;
+        }
+        .radio-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 15px;
+            color: #444;
+            cursor: pointer;
+            margin-right: 6px;
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1.5px solid transparent;
+            transition: all 0.2s ease;
+        }
+        .radio-label:hover {
+            background: #faf6f1;
+            border-color: #e5ddd3;
+        }
+        .radio-label input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #8b7355;
+            margin: 0;
+        }
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #666;
+            margin: 8px 0 36px;
+            cursor: pointer;
+            line-height: 1.5;
+        }
+        .checkbox-label input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #8b7355;
+            border-radius: 4px;
+        }
+        .btn-view-terms {
+            font-size: 12px;
+            padding: 4px 10px;
+            border: 1px solid #e0dbd5;
+            border-radius: 6px;
+            background: #faf9f7;
+            color: #888;
+            cursor: pointer;
+            margin-left: 4px;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+        .btn-view-terms:hover {
+            background: #f0ebe5;
+            color: #666;
+        }
+        .submit-wrapper {
+            position: relative;
+            text-align: center;
+            width: 100%;
+        }
+        .btn-submit {
+            background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+            color: #fff;
+            font-size: 19px;
+            font-weight: 800;
+            width: 100%;
+            max-width: 400px;
+            height: 62px;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-submit::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #8b7355 0%, #c4a87a 100%);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            border-radius: inherit;
+        }
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(139,115,85,0.35);
+        }
+        .btn-submit:hover::after {
+            opacity: 1;
+        }
+        .btn-submit span {
+            position: relative;
+            z-index: 1;
+        }
+        .btn-submit:active {
+            transform: translateY(-1px);
+        }
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .badge-red {
+            position: absolute;
+            top: -22px;
+            right: 50%;
+            margin-right: -230px;
+            background: linear-gradient(135deg, #e53935 0%, #ff5252 100%);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 800;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 4px 14px rgba(229, 57, 53, 0.35);
+            line-height: 1.3;
+            text-align: center;
+            letter-spacing: -0.3px;
+            z-index: 10;
+            animation: badgePulse 2s infinite;
+        }
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Contact and Date Specific Overrides */
+        .contact-group { display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; width: 100%; }
+        .contact-group .form-control { flex: 1; min-width: 0; text-align: center; padding: 0 8px; }
+        .contact-group span { color: #ccc; flex-shrink: 0; font-weight: 300; }
+
+        .wed-date-group { display: flex; gap: 8px; flex-wrap: nowrap; width: 100%; }
+        .wed-date-group .form-control { flex: 1; min-width: 0; }
+        .row-layout { display: flex; flex-direction: row; align-items: center; flex-wrap: wrap; }
+
+        /* Success toast animation */
+        .form-success-msg {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            background: #f0f9f0;
+            border-radius: 12px;
+            color: #2e7d32;
+            font-weight: 600;
+            font-size: 16px;
+            margin-top: 16px;
+            animation: fadeInUp 0.4s ease;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .form-section {
+                padding: 50px 16px;
+            }
+            .form-container {
+                padding: 36px 22px;
+                border-radius: 16px;
+            }
+            .form-header {
+                margin-bottom: 32px;
+            }
+            .form-header h2 {
+                font-size: 26px;
+            }
+            .form-header .sub-desc {
+                font-size: 14px;
+            }
+            .form-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                padding: 20px 0;
+            }
+            .form-label {
+                width: 100%;
+                font-size: 14px;
+                color: #555;
+                margin-bottom: 0;
+            }
+            .form-control {
+                width: 100% !important;
+                height: 46px;
+                font-size: 14px;
+            }
+            .form-input-box:not(.row-layout) {
+                width: 100%;
+            }
+            .radio-label {
+                padding: 6px 10px;
+                font-size: 14px;
+            }
+            .badge-red {
+                right: 0;
+                margin-right: -8px;
+                transform: scale(0.85);
+            }
+            .btn-submit {
+                max-width: 100%;
+                height: 56px;
+                font-size: 17px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-logo">Ace Wedding</div>
+        <div class="loading-bar-container">
+            <div class="loading-bar" id="loadingBar"></div>
+        </div>
+    </div>
+
+    <!-- Landing Page Content -->
+    <main class="landing-wrapper" id="landingWrapper">
+        <section class="landing-section" id="section-init">
+            <picture>
+                <source media="(max-width: 768px)" srcset="images/mobile/18.jpg">
+                <img src="images/18.jpg" alt="에이스웨딩 이벤트 안내" fetchpriority="high">
+            </picture>
+        </section>
+        <section class="landing-section" id="section-1">
+            <picture>
+                <source media="(max-width: 768px)" srcset="images/mobile/1.jpg">
+                <img src="images/1.jpg" alt="에이스웨딩 메인 비주얼" loading="lazy">
+            </picture>
+        </section>
+        <section class="landing-section" id="section-2">
+            <picture>
+                <source media="(max-width: 768px)" srcset="images/mobile/2.jpg">
+                <img src="images/2.jpg" alt="에이스웨딩 소개" loading="lazy">
+            </picture>
+        </section>
+        <section class="landing-section" id="section-3">
+            <picture>
+                <source media="(max-width: 768px)" srcset="images/mobile/3.jpg">
+                <img src="images/3.jpg" alt="에이스웨딩 웨딩홀" loading="lazy">
+            </picture>
+        </section>
+        <section class="landing-section" id="section-4">
+            <picture>
+                <source media="(max-width: 768px)" srcset="images/mobile/4.jpg">
+                <img src="images/4.jpg" alt="에이스웨딩 웨딩홀 상세" loading="lazy">
+            </picture>
+        </section>
+        <section class="landing-section" id="section-5">
+            <picture>
+                <source media="(max-width: 768px)" srcset="images/mobile/5.jpg">
+                <img src="images/5.jpg" alt="에이스웨딩 스튜디오" loading="lazy">
+            </picture>
+        </section>
+        <section class="landing-section" id="section-6">
+            <picture>
+                <source media="(max-width: 768px)" srcset="images/mobile/6.jpg">
+                <img src="images/6.jpg" alt="에이스웨딩 스튜디오 상세" loading="lazy">
+            </picture>
+        </section>
+        <section class="landing-section" id="section-7">
+            <picture>
+                <source media="(max-width: 768px)" srcset="images/mobile/7.jpg">
+                <img src="images/7.jpg" alt="에이스웨딩 드레스" loading="lazy">
+            </picture>
+        </section>
+        <section class="landing-section" id="section-8">
+            <picture>
+                <source media="(max-width: 768px)" srcset="images/mobile/8.jpg">
+                <img src="images/8.jpg" alt="에이스웨딩 드레스 상세" loading="lazy">
+            </picture>
+        </section>
+        <section class="landing-section" id="section-9">
+            <picture>
+                <source media="(max-width: 768px)" srcset="images/mobile/9.jpg">
+                <img src="images/9.jpg" alt="에이스웨딩 서비스" loading="lazy">
+            </picture>
+        </section>
+        <section class="landing-section" id="section-10">
+            <picture>
+                <source media="(max-width: 768px)" srcset="images/mobile/10.jpg">
+                <img src="images/10.jpg" alt="에이스웨딩 패키지" loading="lazy">
+            </picture>
+        </section>
+        <section class="landing-section" id="section-11">
+            <picture>
+                <source media="(max-width: 768px)" srcset="images/mobile/11.jpg">
+                <img src="images/11.jpg" alt="에이스웨딩 이벤트" loading="lazy">
+            </picture>
+        </section>
+        <section class="landing-section" id="section-12">
+            <picture>
+                <source media="(max-width: 768px)" srcset="images/mobile/12.jpg">
+                <img src="images/12.jpg" alt="에이스웨딩 후기" loading="lazy">
+            </picture>
+        </section>
+        <section class="landing-section" id="section-13">
+            <picture>
+                <source media="(max-width: 768px)" srcset="images/mobile/13.jpg">
+                <img src="images/13.jpg" alt="에이스웨딩 메이크업" loading="lazy">
+            </picture>
+        </section>
+        <section class="landing-section" id="section-14">
+            <picture>
+                <source media="(max-width: 768px)" srcset="images/mobile/14.jpg">
+                <img src="images/14.jpg" alt="에이스웨딩 제휴 업체" loading="lazy">
+            </picture>
+        </section>
+        <section class="landing-section" id="section-15">
+            <picture>
+                <source media="(max-width: 768px)" srcset="images/mobile/15.jpg">
+                <img src="images/15.jpg" alt="에이스웨딩 기타 서비스" loading="lazy">
+            </picture>
+        </section>
+        <section class="landing-section" id="section-16">
+            <picture>
+                <source media="(max-width: 768px)" srcset="images/mobile/16.jpg">
+                <img src="images/16.jpg" alt="에이스웨딩 혼수 가전" loading="lazy">
+            </picture>
+        </section>
+        <!-- Form Section -->
+        <section class="landing-section form-section" id="section-form">
+            <div class="form-container">
+                <div class="form-header">
+                    <p>프라이빗웨딩&혼수박람회</p>
+                    <h2>무료 참가신청</h2>
+                    <p class="sub-desc">사전예약시 특별선물을 드립니다.</p>
+                </div>
+                
+                <form id="inquiryForm" onsubmit="submitForm(event)">
+                    <div class="form-group">
+                        <div class="form-label">신청자</div>
+                        <div class="form-input-box row-layout">
+                            <input type="text" name="name" class="form-control" style="width: 180px;" placeholder="이름 입력" required>
+                            <label class="radio-label">
+                                <input type="radio" name="gender" value="신랑" required> 신랑
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="gender" value="신부" required> 신부
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="form-label">연락처</div>
+                        <div class="form-input-box contact-group">
+                            <select name="phone1" class="form-control">
+                                <option value="010">010</option>
+                                <option value="011">011</option>
+                            </select>
+                            <span>-</span>
+                            <input type="text" name="phone2" class="form-control" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="0000" required>
+                            <span>-</span>
+                            <input type="text" name="phone3" class="form-control" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="0000" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="form-label">결혼예정일</div>
+                        <div class="form-input-box wed-date-group">
+                            <select name="wed_year" id="wedYear" class="form-control" onchange="updateDays()">
+                                <option value="2026">2026년</option>
+                                <option value="2027">2027년</option>
+                                <option value="2028">2028년</option>
+                                <option value="2029">2029년</option>
+                                <option value="2030">2030년</option>
+                                <option value="2031">2031년</option>
+                                <option value="미정">미정</option>
+                            </select>
+                            <select name="wed_month" id="wedMonth" class="form-control" onchange="updateDays()">
+                                <option value="1">1월</option><option value="2">2월</option><option value="3">3월</option>
+                                <option value="4">4월</option><option value="5">5월</option><option value="6">6월</option>
+                                <option value="7">7월</option><option value="8">8월</option><option value="9">9월</option>
+                                <option value="10">10월</option><option value="11">11월</option><option value="12">12월</option>
+                                <option value="미정">미정</option>
+                            </select>
+                            <select name="wed_day" id="wedDay" class="form-control">
+                                <option value="미정">일 선택</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="form-label">참가예정일</div>
+                        <div class="form-input-box row-layout">
+                            <label class="radio-label">
+                                <input type="radio" name="visit_date" value="토요일" required> 04월25일(토)
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="visit_date" value="일요일" required> 04월26일(일)
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="visit_date" value="평일상담" required> 평일 상담예약
+                            </label>
+                        </div>
+                    </div>
+
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="privacy" required>
+                        개인정보수집 및 이용안내에 동의합니다.
+                        <button type="button" class="btn-view-terms" onclick="alert('개인정보처리방침 안내 관련 모달/페이지 띄우기 처리 공간입니다.')">보기</button>
+                    </label>
+
+                    <div style="text-align: center;">
+                        <div class="submit-wrapper">
+                            <button type="submit" class="btn-submit" id="submitBtn"><span>무료사전신청</span></button>
+                            <div class="badge-red">사전신청<br>무료입장</div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Map Section (PC + Mobile) -->
+        <section class="landing-section map-section" id="section-map">
+            <div class="map-section-inner">
+                <p class="map-subtitle">에이스웨딩 박람회</p>
+                <h2 class="map-title">오시는 길 안내</h2>
+                <div class="map-container">
+                    <div id="kakaoMap"></div>
+                </div>
+                <div class="map-info">
+                    <p class="map-info-name">에이스웨딩</p>
+                    <p class="map-info-address">· 지번 주소 : 충북 청주시 서원구 죽림동 98 2F 에이스웨딩</p>
+                    <p class="map-info-address">· 도로명 주소 : 충북 청주시 서원구 2순환로1432번길 30 2F 에이스웨딩</p>
+                    <p class="map-info-note">* 에이스웨딩 이용 고객 전용 무료 주차 제공</p>
+                    <a href="https://map.kakao.com/link/map/에이스웨딩,36.6022,127.4660" target="_blank" rel="noopener" class="map-link-btn">카카오맵에서 보기</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="맨 위로 이동">
+        ↑
+    </button>
+
+    <script>
+        // Loading screen logic
+        (function() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const loadingBar = document.getElementById('loadingBar');
+            const firstImage = document.querySelector('.landing-section:first-child img');
+
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 90) progress = 90;
+                loadingBar.style.width = progress + '%';
+            }, 200);
+
+            if (firstImage.complete) {
+                clearInterval(interval);
+                loadingBar.style.width = '100%';
+                setTimeout(() => loadingScreen.classList.add('hidden'), 300);
+            } else {
+                firstImage.addEventListener('load', () => {
+                    clearInterval(interval);
+                    loadingBar.style.width = '100%';
+                    setTimeout(() => loadingScreen.classList.add('hidden'), 500);
+                });
+                setTimeout(() => {
+                    clearInterval(interval);
+                    loadingBar.style.width = '100%';
+                    setTimeout(() => loadingScreen.classList.add('hidden'), 300);
+                }, 5000);
+            }
+        })();
+
+        // Back to top button
+        (function() {
+            const btn = document.getElementById('backToTop');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 600) {
+                    btn.classList.add('visible');
+                } else {
+                    btn.classList.remove('visible');
+                }
+            });
+            btn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        })();
+    </script>
+
+    <!-- Kakao Map SDK -->
+    <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_KAKAO_APP_KEY&autoload=false"></script>
+    <script>
+        // Kakao Map initialization
+        // NOTE: 카카오 개발자 사이트(developers.kakao.com)에서 JavaScript 앱 키를 발급받아
+        //       위 script 태그의 YOUR_KAKAO_APP_KEY 부분을 교체해주세요.
+        if (window.kakao && window.kakao.maps) {
+            kakao.maps.load(function() {
+                var container = document.getElementById('kakaoMap');
+                var options = {
+                    center: new kakao.maps.LatLng(36.6022, 127.4660),
+                    level: 4
+                };
+                var map = new kakao.maps.Map(container, options);
+
+                // Marker
+                var markerPosition = new kakao.maps.LatLng(36.6022, 127.4660);
+                var marker = new kakao.maps.Marker({
+                    position: markerPosition
+                });
+                marker.setMap(map);
+
+                // Info window
+                var infowindow = new kakao.maps.InfoWindow({
+                    content: '<div style="padding:8px 12px;font-size:13px;font-weight:600;white-space:nowrap;">에이스웨딩</div>'
+                });
+                infowindow.open(map, marker);
+
+                // Map controls
+                var zoomControl = new kakao.maps.ZoomControl();
+                map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+                // Responsive: re-center on resize
+                window.addEventListener('resize', function() {
+                    map.setCenter(new kakao.maps.LatLng(36.6022, 127.4660));
+                });
+            });
+        }
+
+        // Dynamic day options based on year & month
+        function updateDays() {
+            var yearSel = document.getElementById('wedYear');
+            var monthSel = document.getElementById('wedMonth');
+            var daySel = document.getElementById('wedDay');
+            var year = parseInt(yearSel.value);
+            var month = parseInt(monthSel.value);
+            
+            // Save current selection
+            var currentDay = daySel.value;
+            
+            // Clear existing options
+            daySel.innerHTML = '<option value="미정">일 선택</option>';
+            
+            if (yearSel.value === '미정' || monthSel.value === '미정') return;
+            
+            // Calculate days in month
+            var daysInMonth = new Date(year, month, 0).getDate();
+            for (var d = 1; d <= daysInMonth; d++) {
+                var opt = document.createElement('option');
+                opt.value = d;
+                opt.textContent = d + '일';
+                if (String(d) === currentDay) opt.selected = true;
+                daySel.appendChild(opt);
+            }
+            // Add 미정 at the end
+            var undecidedOpt = document.createElement('option');
+            undecidedOpt.value = '미정';
+            undecidedOpt.textContent = '미정';
+            if (currentDay === '미정') undecidedOpt.selected = true;
+            daySel.appendChild(undecidedOpt);
+        }
+        // Initialize days on page load
+        updateDays();
+
+        // Form Submit to Google Sheets (Apps Script)
+        function submitForm(e) {
+            e.preventDefault();
+            
+            // 구글 앱스 스크립트 배포 시 발급받은 웹 앱 URL
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbwxUNeLLISCvV4M83ep3dzls5YZYNEEb7nXzE5YhhQPbJ_31RVp4BWm6ydMr-QhFao/exec';
+
+            const form = document.getElementById('inquiryForm');
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.querySelector('span').innerText = "전송 중...";
+
+            fetch(scriptURL, { method: 'POST', body: new FormData(form), mode: 'no-cors'})
+                .then(response => {
+                    alert('성공적으로 참가신청이 완료되었습니다.');
+                    form.reset();
+                    updateDays(); // Reset days dropdown
+                    submitBtn.disabled = false;
+                    submitBtn.querySelector('span').innerText = "무료사전신청";
+                })
+                .catch(error => {
+                    console.error('Error!', error.message);
+                    alert('일시적인 오류가 발생했습니다. 다시 시도해주세요.');
+                    submitBtn.disabled = false;
+                    submitBtn.querySelector('span').innerText = "무료사전신청";
+                });
+        }
+    </script>
+</body>
+</html>
