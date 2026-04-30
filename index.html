@@ -967,14 +967,22 @@
                 <p class="map-subtitle">에이스웨딩 박람회</p>
                 <h2 class="map-title">오시는 길 안내</h2>
                 <div class="map-container">
-                    <div id="kakaoMap"></div>
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3215.5!2d127.4638!3d36.6022!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzbCsDM2JzA3LjkiTiAxMjfCsDI3JzU3LjYiRQ!5e0!3m2!1sko!2skr!4v1700000000000"
+                        width="100%"
+                        height="100%"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
                 </div>
                 <div class="map-info">
                     <p class="map-info-name">에이스웨딩</p>
                     <p class="map-info-address">· 지번 주소 : 충북 청주시 서원구 죽림동 98 2F 에이스웨딩</p>
                     <p class="map-info-address">· 도로명 주소 : 충북 청주시 서원구 2순환로1432번길 30 2F 에이스웨딩</p>
                     <p class="map-info-note">* 에이스웨딩 이용 고객 전용 무료 주차 제공</p>
-                    <a href="https://map.kakao.com/link/map/에이스웨딩,36.6022,127.4660" target="_blank" rel="noopener" class="map-link-btn">카카오맵에서 보기</a>
+                    <a href="https://map.google.com/maps?q=36.6022,127.4660" target="_blank" rel="noopener" class="map-link-btn">구글맵에서 보기</a>
                 </div>
             </div>
         </section>
@@ -1046,45 +1054,7 @@
         }
     </script>
 
-    <!-- Kakao Map SDK -->
-    <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_KAKAO_APP_KEY&autoload=false"></script>
     <script>
-        // Kakao Map initialization
-        // NOTE: 카카오 개발자 사이트(developers.kakao.com)에서 JavaScript 앱 키를 발급받아
-        //       위 script 태그의 YOUR_KAKAO_APP_KEY 부분을 교체해주세요.
-        if (window.kakao && window.kakao.maps) {
-            kakao.maps.load(function() {
-                var container = document.getElementById('kakaoMap');
-                var options = {
-                    center: new kakao.maps.LatLng(36.6022, 127.4660),
-                    level: 4
-                };
-                var map = new kakao.maps.Map(container, options);
-
-                // Marker
-                var markerPosition = new kakao.maps.LatLng(36.6022, 127.4660);
-                var marker = new kakao.maps.Marker({
-                    position: markerPosition
-                });
-                marker.setMap(map);
-
-                // Info window
-                var infowindow = new kakao.maps.InfoWindow({
-                    content: '<div style="padding:8px 12px;font-size:13px;font-weight:600;white-space:nowrap;">에이스웨딩</div>'
-                });
-                infowindow.open(map, marker);
-
-                // Map controls
-                var zoomControl = new kakao.maps.ZoomControl();
-                map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
-
-                // Responsive: re-center on resize
-                window.addEventListener('resize', function() {
-                    map.setCenter(new kakao.maps.LatLng(36.6022, 127.4660));
-                });
-            });
-        }
-
         // Dynamic day options based on year & month
         function updateDays() {
             var yearSel = document.getElementById('wedYear');
