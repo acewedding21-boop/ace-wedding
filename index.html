@@ -999,28 +999,25 @@
             const loadingBar = document.getElementById('loadingBar');
             const firstImage = document.querySelector('.landing-section:first-child img');
 
+            function hideLoading() {
+                loadingBar.style.width = '100%';
+                setTimeout(function() { loadingScreen.classList.add('hidden'); }, 300);
+            }
+
             let progress = 0;
-            const interval = setInterval(() => {
+            const interval = setInterval(function() {
                 progress += Math.random() * 15;
                 if (progress > 90) progress = 90;
                 loadingBar.style.width = progress + '%';
             }, 200);
 
-            if (firstImage.complete) {
+            if (!firstImage || firstImage.complete) {
                 clearInterval(interval);
-                loadingBar.style.width = '100%';
-                setTimeout(() => loadingScreen.classList.add('hidden'), 300);
+                hideLoading();
             } else {
-                firstImage.addEventListener('load', () => {
-                    clearInterval(interval);
-                    loadingBar.style.width = '100%';
-                    setTimeout(() => loadingScreen.classList.add('hidden'), 500);
-                });
-                setTimeout(() => {
-                    clearInterval(interval);
-                    loadingBar.style.width = '100%';
-                    setTimeout(() => loadingScreen.classList.add('hidden'), 300);
-                }, 5000);
+                firstImage.addEventListener('load', function() { clearInterval(interval); hideLoading(); });
+                firstImage.addEventListener('error', function() { clearInterval(interval); hideLoading(); });
+                setTimeout(function() { clearInterval(interval); hideLoading(); }, 3000);
             }
         })();
 
