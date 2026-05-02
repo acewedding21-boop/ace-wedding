@@ -1118,7 +1118,7 @@
             const form = document.getElementById('inquiryForm');
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = true;
-            submitBtn.querySelector('span').innerText = "전송 중...";
+            submitBtn.querySelector('span').innerText = "신청중...";
 
             fetch(scriptURL, { method: 'POST', body: new FormData(form), mode: 'no-cors'})
                 .then(response => {
