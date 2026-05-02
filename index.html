@@ -948,7 +948,29 @@
                     <label class="checkbox-label">
                         <input type="checkbox" name="privacy" required>
                         개인정보수집 및 이용안내에 동의합니다.
-                        <button type="button" class="btn-view-terms" onclick="alert('개인정보처리방침 안내 관련 모달/페이지 띄우기 처리 공간입니다.')">보기</button>
+                        <button type="button" class="btn-view-terms" onclick="document.getElementById('privacyModal').style.display='flex'">보기</button>
+                    </label>
+
+                    <!-- Privacy Modal -->
+                    <div id="privacyModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;padding:20px;" onclick="if(event.target===this)this.style.display='none'">
+                        <div style="background:#fff;border-radius:16px;max-width:500px;width:100%;max-height:80vh;overflow-y:auto;padding:32px 28px;box-shadow:0 20px 60px rgba(0,0,0,0.2);position:relative;">
+                            <button onclick="document.getElementById('privacyModal').style.display='none'" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:20px;color:#999;cursor:pointer;">&times;</button>
+                            <h3 style="font-size:17px;font-weight:700;color:#3d3428;margin-bottom:20px;font-family:'Noto Sans KR',sans-serif;">개인정보 수집 및 이용 안내</h3>
+                            <div style="font-size:13px;line-height:1.9;color:#555;font-family:'Noto Sans KR',sans-serif;">
+                                <p style="font-weight:600;color:#3d3428;margin-bottom:8px;">1. 수집하는 개인정보 항목</p>
+                                <p style="margin-bottom:16px;padding-left:12px;">성명, 연락처(휴대전화번호), 예식 예정일, 참가예정일</p>
+                                <p style="font-weight:600;color:#3d3428;margin-bottom:8px;">2. 개인정보의 수집 및 이용 목적</p>
+                                <p style="margin-bottom:16px;padding-left:12px;">에이스웨딩 박람회 사전예약 접수, 상담 안내 및 이벤트 안내 연락, 방문 일정 조율</p>
+                                <p style="font-weight:600;color:#3d3428;margin-bottom:8px;">3. 개인정보의 보유 및 이용 기간</p>
+                                <p style="margin-bottom:16px;padding-left:12px;">수집일로부터 <strong>1년간</strong> 보유 후 지체 없이 파기합니다. 단, 관계 법령에 따라 보존이 필요한 경우 해당 기간 동안 보관됩니다.</p>
+                                <p style="font-weight:600;color:#3d3428;margin-bottom:8px;">4. 동의 거부권 및 불이익</p>
+                                <p style="margin-bottom:16px;padding-left:12px;">귀하는 개인정보 수집 및 이용에 동의하지 않을 권리가 있습니다. 다만, 동의를 거부할 경우 박람회 사전예약 서비스 이용이 제한될 수 있습니다.</p>
+                                <p style="font-weight:600;color:#3d3428;margin-bottom:8px;">5. 개인정보 처리 위탁</p>
+                                <p style="margin-bottom:16px;padding-left:12px;">수집된 개인정보는 상담 목적 외 제3자에게 제공되지 않으며, 에이스웨딩 내부 상담 업무에만 사용됩니다.</p>
+                            </div>
+                            <button onclick="document.getElementById('privacyModal').style.display='none'" style="width:100%;padding:14px;background:linear-gradient(135deg,#8b7355,#a08c6e);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;margin-top:12px;font-family:'Noto Sans KR',sans-serif;">확인</button>
+                        </div>
+                    </div>
                     </label>
 
                     <div style="text-align: center;">
